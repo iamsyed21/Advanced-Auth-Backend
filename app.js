@@ -1,0 +1,20 @@
+import express from "express";
+import router from "./routes/user-routes.js";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import { notFound, errorHandler } from "./middlerware/errorMiddleware.js";
+import connectDb from "./config/db.js";
+dotenv.config();
+import cors from 'cors';
+const port = process.env.port || 3000;
+connectDb();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(cookieParser());
+app.use('/api/users', router);
+app.use(notFound);
+app.use(errorHandler);
+app.listen(port, ()=>{console.log(`server is running on :${port}`);});
